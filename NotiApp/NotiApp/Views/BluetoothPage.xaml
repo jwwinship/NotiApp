@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="NotiApp.Views.BluetoothPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Select the Bluethooth Options!"
+                VerticalOptions="Center" 
+                HorizontalOptions="CenterAndExpand" />
+
+            <Button Command="{Binding Button_BT_TurnOn}" Text="Bluetooth - Turn On" BackgroundColor="#7100FF"/>
+            <Button Command="{Binding Button_BT_TurnOff}" Text="Bluetooth - Turn Off"/>
+            <Button Command="{Binding Button_BT_ShowPaired}" Text="Bluetooth - Show Paired"/>
+            <Button Command="{Binding Button_BT_Discover}" Text="Bluetooth - Discover"/>
+            <Button Command="{Binding Button_BT_Connect}" Text="Bluetooth - Connect"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

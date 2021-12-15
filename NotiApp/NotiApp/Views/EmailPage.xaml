@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NotiApp.Views.EmailPage"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <ContentPage.Content>
+        <StackLayout Padding="50" 
+                 Spacing="20" >
+
+            <Label Text="Noti Companion App"
+               HorizontalOptions="Center"
+               FontSize="Large"
+               Margin="0,0,0,30"/>
+
+            <Entry Placeholder="Imap host"
+               Text="{Binding Host, TargetNullValue='imap-mail.outlook.com'}"
+               TextColor="Black"
+               BackgroundColor="MediumPurple"
+               />
+
+            <Entry Placeholder="User name"
+               Text="{Binding Username, TargetNullValue='thenoti@outlook.com' } "
+               TextColor="Black"
+               BackgroundColor="MediumPurple"/>
+
+            <Entry Placeholder="Password" 
+               IsPassword="True"
+               Text="{Binding Password, TargetNullValue='onoti2021k'}" 
+               TextColor="Black"
+               BackgroundColor="MediumPurple"/>
+
+            <ActivityIndicator x:Name="activity" />
+
+            <Label Text="Silent Mode" />
+            <Switch HorizontalOptions="Center" Toggled="Switch_Toggled" IsToggled="{Binding silentMode}"/>
+
+            <Button x:Name="myButton"
+                VerticalOptions="End"
+                Text="Get message" 
+                Command="{Binding Button_Clicked}" HorizontalOptions="Fill" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
