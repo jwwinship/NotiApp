@@ -142,26 +142,25 @@ namespace NotiApp.ViewModels
 
                 else if (myImap.SelectedFolder.Count > messageList.Count)
                 {
-                    //bool criticalEmailFound = true; //Default to true
+                    bool criticalEmailFound = true; //Default to true
 
                     var newMessages = GetMessages();
                     //_customBluetoothManager.DoSendStream(dataToSend);
                     foreach (var message in newMessages)
                     {
 
-                        if (!message.Value.Flags.Contains(ImapMessageFlags.Seen)/* && !messageList.ContainsKey(message.Key)*/)
+                        if (!message.Value.Flags.Contains(ImapMessageFlags.Seen))
                         {
-                            _customBluetoothManager.DoSendStream(dataToSend);
-                            await PageExtensions.DisplayAlertOnUi(_customBluetoothManager.GetPage(), "Message alert", "Message received. \nSubject: " + myImap.PeekMessage(message.Key).Subject, "Accept", "Close");
-                        }
-                        //criticalEmailFound = checkKeywordsInBody(message, new string[]{"unsubscribe", "giveaway"}); //Checks for spam keywords
-                        //if (criticalEmailFound)
-                        //{
                             
-                        //}
-                        
+                            criticalEmailFound = checkKeywordsInBody(message, new string[] { "unsubscribe", "giveaway", "click", "click here"}); //Checks for spam keywords
+                            checkSenderWhitelist(message, ref criticalEmailFound); //Let's see if this works
+                            if (criticalEmailFound)
+                            {
+                                _customBluetoothManager.DoSendStream(dataToSend);
+                                await PageExtensions.DisplayAlertOnUi(_customBluetoothManager.GetPage(), "Message alert", "Message received. \nSubject: " + myImap.PeekMessage(message.Key).Subject, "Accept", "Close");
+                            }
+                        }   
                     }
-
                     messageList = newMessages;
                 }
 
@@ -186,18 +185,28 @@ namespace NotiApp.ViewModels
             return items;
         }
 
-        //public bool checkKeywordsInBody(KeyValuePair<string, ImapMessageInfo> messageInfo, string[] keywords)
-        //{
-        //    bool criticalEmailFound = true;
-        //    MailMessage message = myImap.GetMessag e(messageInfo.Key);//Turn message info into message
-        //    foreach (string keyword in keywords)
-        //    {
-        //        if (message.BodyText.Contains(keyword))
-        //        {
-        //            criticalEmailFound = false; //message is not important
-        //        }
-        //    }
-        //    return criticalEmailFound;
-        //}
+        public bool checkKeywordsInBody(KeyValuePair<string, ImapMessageInfo> messageInfo, string[] keywords)
+        {
+            bool criticalEmailFound = true;
+            MailMessage message = myImap.PeekMessage(messageInfo.Key);//Turn message info into message
+            foreach (string keyword in keywords)
+            {
+                if (message.BodyText.Contains(keyword) || message.Subject.Contains(keyword))
+                {
+                    criticalEmailFound = false; //message is not important
+                }
+            }
+            return criticalEmailFound;
+        }
+
+        public void checkSenderWhitelist(KeyValuePair<string, ImapMessageInfo> messageInfo, ref bool criticalEmailFound)
+        {
+            MailMessage message = myImap.PeekMessage(messageInfo.Key);
+            if (message.From[0].Address.Equals("cubemaster118@gmail.com"))
+            {
+                criticalEmailFound = true;
+            }
+
+        }
     }
 }
